@@ -1,0 +1,20 @@
+<!--<div class="events-grid">
+    <div *ngFor="let event of events" class="event-card">
+      <a [routerLink]="['/event', event.id]">
+        <h2>{{ event.title }}</h2>
+        <h3>{{ event.subtitle }}</h3>
+        <img src="assets/img/sample-image.jpg" alt="Event Image">
+        <p>{{ event.place }}</p>
+        <p>{{ event.startDate | date }}</p>
+        <p>{{ event.endDate | date }}</p>
+       
+        <button>Ver detalles</button>
+      </a>
+    </div>
+  </div>
+-->  
+<div fxLayout="row wrap" fxLayoutGap="20px">
+<!-- <div class="card-container"> -->
+    <app-event-card fxFlex="90%" fxFlex.gt-sm="40%" *ngFor="let event of events" [title]="event.title" [subtitle]="event.subtitle" [place]="event.place"
+        [startDate]="event.startDate" [endDate]="event.endDate" [description]="event.description"></app-event-card>
+</div>
