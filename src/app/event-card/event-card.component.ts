@@ -6,11 +6,16 @@ import { Component, Input } from '@angular/core';
   styleUrl: './event-card.component.css'
 })
 export class EventCardComponent {
+  @Input() id!: string;
   @Input() title!: string;
   @Input() subtitle!: string;
   @Input() image!: string;
   @Input() place!: string;
-  @Input() startDate!: Date;
-  @Input() endDate!: Date;
+  @Input() startDate!: string;
+  @Input() endDate!: string;
   @Input() description!: string;
+
+  getFormattedDate(date: string): string {
+    return new Date(parseInt(date)).toLocaleString();
+  }
 }

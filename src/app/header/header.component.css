@@ -1,0 +1,11 @@
+:host {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;    
+}
+.header {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}

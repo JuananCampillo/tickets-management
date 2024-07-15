@@ -1,4 +1,4 @@
-.card-container {
+/* .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 16px;
@@ -6,6 +6,6 @@
 
 .card-container app-event-card {
   margin: 5px;  
-  max-width: 100px; /* Ajusta este valor a tus necesidades */
+  max-width: 100px; 
 
-}
+} */

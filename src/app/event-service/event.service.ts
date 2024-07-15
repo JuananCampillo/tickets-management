@@ -13,7 +13,7 @@ export class EventService {
     return this.http.get('/assets/events.json');
   }
 
-  getEventInfo(id: number): Observable<any> {
-    return this.http.get(`/assets/event-${id}.json`);
+  getEventInfo(id: string): Observable<any> {
+    return this.http.get(`/assets/event-info-${id}.json`);
   }
 }

@@ -1,0 +1,17 @@
+.contenedor-imagen img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+.boton {
+    background-color: #673ab7;
+    color: white;
+    font-size: 18px;
+    padding: 12px 24px;
+    width: 100%;  
+}
+
+.clickable {
+    cursor: pointer;
+}

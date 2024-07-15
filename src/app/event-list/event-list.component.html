@@ -13,8 +13,8 @@
     </div>
   </div>
 -->  
-<div fxLayout="row wrap" fxLayoutGap="20px">
+<div class="card-container" fxLayout="row wrap" fxLayoutGap="20px">
 <!-- <div class="card-container"> -->
-    <app-event-card fxFlex="90%" fxFlex.gt-sm="40%" *ngFor="let event of events" [title]="event.title" [subtitle]="event.subtitle" [place]="event.place"
+    <app-event-card fxFlex="90%" fxFlex.gt-sm="40%" *ngFor="let event of events" [id]="event.id" [title]="event.title" [subtitle]="event.subtitle" [place]="event.place"
         [startDate]="event.startDate" [endDate]="event.endDate" [description]="event.description"></app-event-card>
 </div>

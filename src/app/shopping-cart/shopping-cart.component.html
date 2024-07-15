@@ -1,0 +1,11 @@
+<div *ngFor="let event of events">
+    <h2>{{event.title}}</h2>
+    <div *ngFor="let session of event.sessions">
+      <p>Fecha: {{session.date}}</p>
+      <p>Localidades seleccionadas: {{session.selected}}</p>
+      <button (click)="onRemove(session)">
+        <!-- <mat-icon>delete</mat-icon> -->
+      </button>
+    </div>
+  </div>
+  

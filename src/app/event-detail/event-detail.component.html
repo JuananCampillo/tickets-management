@@ -1,1 +1,21 @@
-<p>event-detail works!</p>
+<div class="details" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+    <span>{{eventInfo.event?eventInfo.event.title:""}}</span>
+    <span>{{eventInfo.event?eventInfo.event.subtitle:""}}</span>
+    <div *ngFor="let session of eventInfo.sessions" fxLayout="row" fxLayoutGap="10px">
+        <div fxFlex="50%" fxLayout="column" fxLayoutAlign="space-between center">
+          <span>Fecha: {{getFormattedDate(session.date)}}</span>
+          <span>Disponibilidad: {{ session.availability }}</span>
+        </div>
+        <div fxFlex="50%" fxLayout="row" fxLayoutAlign="end center">
+          <button mat-icon-button (click)="decrement(session)"><mat-icon>remove</mat-icon></button>
+          <span>{{ session.selected }}</span>
+          <button mat-icon-button (click)="increment(session)"><mat-icon>add</mat-icon></button> 
+        </div>
+      </div>
+    <div fxFlex="50%" fxFlex.xs="100%">
+      <!-- Aquí va el carrito de la compra -->
+      <!-- <app-shopping-cart [events]="events" (remove)="remove($event)"></app-shopping-cart>  -->
+    </div>
+  </div>
+  <button mat-raised-button [routerLink]="">Volver</button>
+  
