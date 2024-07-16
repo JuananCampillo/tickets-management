@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Event } from '../../models/event.model';
 
 @Component({
   selector: 'app-event-card',
@@ -6,14 +7,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './event-card.component.css'
 })
 export class EventCardComponent {
-  @Input() id!: string;
-  @Input() title!: string;
-  @Input() subtitle!: string;
-  @Input() image!: string;
-  @Input() place!: string;
-  @Input() startDate!: string;
-  @Input() endDate!: string;
-  @Input() description!: string;
+  @Input() event!: Event;
 
   getFormattedDate(date: string): string {
     return new Date(parseInt(date)).toLocaleString();

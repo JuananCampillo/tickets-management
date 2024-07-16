@@ -1,18 +1,14 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Session } from '../../models/session.model';
+import { EventSelected } from '../../models/event.model';
 
-interface Session {
-  date: string;
-  selected: number;
-}
-
-interface Event { id: string, title: string, sessions: { date: string, selected: number }[] };
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.css']
 })
 export class ShoppingCartComponent {
-  @Input() events: Event[] = [];
+  @Input() events: EventSelected[] = [];
   @Output() remove = new EventEmitter<{session: Session, eventTitle: string}>();
 
   onRemove(session: Session, eventTitle: string ) {

@@ -1,0 +1,12 @@
+<div *ngFor="let event of events">
+  <h1>{{event.title}}</h1>
+  <div *ngFor="let session of event.sessions" class="cart">
+    <span>{{getFormattedDate(session.date)}} </span>
+    <span>x{{session.selected}}
+      <button (click)="onRemove(session, event.title)" class="button">
+        <img src="assets/img/trash.png" alt="Trush" class="small-icon">
+      </button>
+    </span>
+
+  </div>
+</div>

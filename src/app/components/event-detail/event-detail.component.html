@@ -1,0 +1,21 @@
+<div class="details" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+  <div class="sessions" fxFlex="50%" fxFlex.xs="100%" *ngIf="!dataNotFound">
+    <b>{{eventInfo.event?eventInfo.event.title:""}}</b>
+    <p>{{eventInfo.event?eventInfo.event.subtitle:""}}</p>
+    <div *ngFor="let session of eventInfo.sessions" fxLayout="row" fxLayoutGap="10px">
+      <div fxFlex="50%" fxLayout="column" fxLayoutAlign="space-between center">
+        <span>Fecha: {{getFormattedDate(session.date)}} Disponibilidad: {{ session.availability }}</span>
+      </div>
+      <div fxFlex="50%" fxLayout="row" fxLayoutAlign="end center">
+        <button mat-icon-button (click)="decrement(session)"><mat-icon>remove</mat-icon></button>
+        <span>{{ session.selected }}</span>
+        <button mat-icon-button (click)="increment(session)"><mat-icon>add</mat-icon></button>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="50%" fxFlex.xs="100%" *ngIf="dataNotFound">EVENT INFO NOT FOUND</div>
+  <div fxFlex="50%" fxFlex.xs="100%">
+    <button class="return-button" mat-raised-button [routerLink]="['/']">Volver</button>
+    <app-shopping-cart [events]="eventsSelected" (remove)="remove($event)"></app-shopping-cart>
+  </div>
+</div>

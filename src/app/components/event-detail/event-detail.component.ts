@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { EventService } from '../event-service/event.service';
+import { EventService } from '../../event-service/event.service';
 import { ActivatedRoute } from '@angular/router';
-import { LocalstorageService } from '../local-storage/local-storage.service';
+import { LocalstorageService } from '../../local-storage/local-storage.service';
+import { EventInfo, EventSelected } from '../../models/event.model';
+import { Session } from '../../models/session.model';
 
 @Component({
   selector: 'app-event-detail',
@@ -9,27 +11,52 @@ import { LocalstorageService } from '../local-storage/local-storage.service';
   styleUrl: './event-detail.component.css'
 })
 export class EventDetailComponent {
-  eventInfo: any = {};
+  eventInfo: EventInfo = {
+    event: {
+      id: '',
+      title: '',
+      subtitle: '',
+      image: ''
+    },
+    sessions: []
+  };
   id: string | null | undefined;
-  eventsSelected: { id: string, title: string, sessions: { date: string, selected: number }[] }[] = [];
+  eventsSelected: EventSelected[] = [];
   eventPosition: number = -1;
+  dataNotFound: boolean = false;
   constructor(private localStorage: LocalstorageService, private eventService: EventService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     if (!!this.id) {
-      this.eventService.getEventInfo(this.id).subscribe((data: any) => {
+      //Cargamos evento seleccionado
+      this.eventService.getEventInfo(this.id).subscribe((data: EventInfo | string) => {
+        //Controlamos el caso en el que no haya datos del evento seleccionado
+        if (typeof data == 'string') {
+          this.dataNotFound = true;
+          return;
+        }
+        this.dataNotFound == false;
         this.eventInfo = data;
         this.eventInfo.sessions = data.sessions.sort((a: { date: string; }, b: { date: string; }) => new Date(parseInt(a.date)).getTime() - new Date(parseInt(b.date)).getTime());
-        this.eventInfo.sessions = this.eventInfo.sessions.map((session: any) => {
+        this.eventInfo.sessions = this.eventInfo.sessions.map((session: Session) => {
           session.selected = 0;
           return session;
         })
-      })
-      let data = this.localStorage.getItem("eventsSelected");
-      this.eventsSelected = data ? JSON.parse(data) : [];
-      this.eventPosition = this.eventsSelected ? this.eventsSelected.findIndex(ev => ev.id == this.eventInfo.event.id) : -1;
+        //Cargamos eventos con elementos en el carrito
+        let localData = this.localStorage.getItem("eventsSelected");
+        this.eventsSelected = localData ? JSON.parse(localData) : [];
+        this.eventPosition = this.eventsSelected ? this.eventsSelected.findIndex(ev => ev.id == this.eventInfo.event.id) : -1;
 
+        //Cargamos en el elemento seleccionado si previamente tenia elementos en el carrito
+        if (!!this.eventInfo.sessions) {
+          this.eventInfo.sessions.map((ses: Session) => {
+            let sessionFound = this.eventsSelected[this.eventPosition] ? this.eventsSelected[this.eventPosition].sessions.find(ses2 => ses.date == ses2.date) : null;
+            ses.selected = sessionFound ? sessionFound.selected : 0;
+            return ses;
+          });
+        }
+      })
 
     }
   }
@@ -38,12 +65,11 @@ export class EventDetailComponent {
     //this.localStorage.clear();
   }
 
-  increment(session: { date: string; selected: number; availability: number; }) {
-    if (session.selected < session.availability) {
+  increment(session: Session) {
+    if (session.availability && session.selected < session.availability) {
       session.selected++;
       //Si el evento no esta seleccionado previamente
       if (this.eventPosition < 0) {
-        console.log(this.eventInfo)
         this.eventPosition = 0;
         this.eventsSelected.push({ id: this.eventInfo.event.id, title: this.eventInfo.event.title, sessions: [{ date: session.date.toLocaleString(), selected: 1 }] });
         this.eventPosition = this.eventsSelected.length - 1;
@@ -59,19 +85,17 @@ export class EventDetailComponent {
         else {
           this.eventsSelected[this.eventPosition].sessions = this.eventsSelected[this.eventPosition].sessions.map(ses => {
             if (session.date == ses.date) {
-              console.log('==')
               ses.selected++;
             }
             return ses;
           });
-          console.log(this.eventsSelected)
         }
       }
       this.localStorage.setItem("eventsSelected", JSON.stringify(this.eventsSelected));
     }
   }
 
-  decrement(session: { date: string; selected: number; }) {
+  decrement(session: Session) {
     if (session.selected > 0) {
       session.selected--;
       //Disminuye el numero de entradas seleccionadas. Si el número de entradas es 0, la sesion deja de estar seleccionada
@@ -90,28 +114,33 @@ export class EventDetailComponent {
     }
   }
 
-  remove(data: { session: { date: string; selected: number; }, eventTitle: string }) {
+  remove(data: { session: Session, eventTitle: string }) {
     //Eliminamos la sesion de los eventos seleccionados. Si el evento no tiene mas sesiones, lo eliminamos.
     let removedEventPosition = this.eventsSelected.findIndex(ev => ev.title == data.eventTitle);
-    this.eventsSelected[removedEventPosition].sessions = this.eventsSelected[removedEventPosition].sessions.filter(ses => ses.date != data.session.date)
+    this.eventsSelected[removedEventPosition].sessions = this.eventsSelected[removedEventPosition].sessions.map(ses => {
+      if (data.session.date == ses.date && ses.selected > 0) {
+        ses.selected--;
+      }
+      return ses;
+    }).filter(ses => ses.selected > 0);
     if (this.eventsSelected[removedEventPosition].sessions.length == 0) {
       this.eventsSelected.splice(removedEventPosition, 1)
     }
     if (data.eventTitle == this.eventInfo.event.title) {
-      this.eventInfo.sessions.map((ses: { date: string; selected: number; }) => {
-        if (ses.date == data.session.date) {
-          ses.selected = 0;
+      this.eventInfo.sessions.map((ses: Session) => {
+        if (ses.date == data.session.date && ses.selected > 0) {
+          ses.selected--;
         }
         return ses;
       })
-      data.session.selected = 0;
+      //data.session.selected = 0;
     }
     this.localStorage.setItem("eventsSelected", JSON.stringify(this.eventsSelected));
     //Recalculamos la posicion del evento actual
     this.eventPosition = this.eventsSelected ? this.eventsSelected.findIndex(ev => ev.id == this.eventInfo.event.id) : -1;
 
   }
-  
+
   getFormattedDate(date: string): string {
     return new Date(parseInt(date)).toLocaleString();
   }

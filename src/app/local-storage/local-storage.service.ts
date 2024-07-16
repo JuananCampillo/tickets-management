@@ -14,9 +14,7 @@ export class LocalstorageService {
   }
 
   getItem(key: string) {
-    console.log('getItem')
     if (this.isBrowser) {
-      console.log('this.isBrowser')
       return localStorage.getItem(this.prefix + key);
     }
     return undefined;

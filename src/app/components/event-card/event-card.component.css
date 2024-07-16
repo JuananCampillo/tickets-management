@@ -2,16 +2,22 @@
     max-width: 100%;
     height: auto;
     object-fit: cover;
-  }
+}
 
-.boton {
+.details-button {
     background-color: #673ab7;
-    color: white;
+    color: white !important;
     font-size: 18px;
     padding: 12px 24px;
-    width: 100%;  
+    width: 100%;
 }
 
 .clickable {
     cursor: pointer;
+}
+
+.card {
+    margin: 10px;
+    flex-grow: 1;
+    flex: 1;
 }
