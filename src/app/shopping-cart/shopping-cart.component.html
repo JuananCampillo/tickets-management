@@ -1,9 +1,11 @@
 <div *ngFor="let event of events">
     <h2>{{event.title}}</h2>
     <div *ngFor="let session of event.sessions">
-      <p>Fecha: {{session.date}}</p>
+      <p>Fecha: {{getFormattedDate(session.date)}}</p>
       <p>Localidades seleccionadas: {{session.selected}}</p>
-      <button (click)="onRemove(session)">
+      <button (click)="onRemove(session, event.title)">
+        <img src="assets/img/trash.png" alt="Descripción de la imagen">
+
         <!-- <mat-icon>delete</mat-icon> -->
       </button>
     </div>

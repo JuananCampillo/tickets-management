@@ -2,15 +2,10 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 interface Session {
   date: string;
-  availability: number;
   selected: number;
 }
 
-interface Event {
-  title: string;
-  sessions: Session[];
-}
-
+interface Event { id: string, title: string, sessions: { date: string, selected: number }[] };
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
@@ -18,9 +13,13 @@ interface Event {
 })
 export class ShoppingCartComponent {
   @Input() events: Event[] = [];
-  @Output() remove = new EventEmitter<Session>();
+  @Output() remove = new EventEmitter<{session: Session, eventTitle: string}>();
 
-  onRemove(session: Session) {
-    this.remove.emit(session);
+  onRemove(session: Session, eventTitle: string ) {
+    this.remove.emit({session, eventTitle});
+  }
+
+  getFormattedDate(date: string): string {
+    return new Date(parseInt(date)).toLocaleString();
   }
 }
