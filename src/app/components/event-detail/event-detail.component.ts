@@ -31,6 +31,9 @@ export class EventDetailComponent {
     if (!!this.id) {
       //Cargamos evento seleccionado
       this.eventService.getEventInfo(this.id).subscribe((data: EventInfo | string) => {
+        //Cargamos eventos con elementos en el carrito
+        let localData = this.localStorage.getItem("eventsSelected");
+        this.eventsSelected = localData ? JSON.parse(localData) : [];
         //Controlamos el caso en el que no haya datos del evento seleccionado
         if (typeof data == 'string') {
           this.dataNotFound = true;
@@ -43,9 +46,8 @@ export class EventDetailComponent {
           session.selected = 0;
           return session;
         })
-        //Cargamos eventos con elementos en el carrito
-        let localData = this.localStorage.getItem("eventsSelected");
-        this.eventsSelected = localData ? JSON.parse(localData) : [];
+
+        //Calculamos la posicion del evento actual entre los eventos seleccionados
         this.eventPosition = this.eventsSelected ? this.eventsSelected.findIndex(ev => ev.id == this.eventInfo.event.id) : -1;
 
         //Cargamos en el elemento seleccionado si previamente tenia elementos en el carrito

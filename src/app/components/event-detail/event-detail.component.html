@@ -13,7 +13,7 @@
       </div>
     </div>
   </div>
-  <div fxFlex="50%" fxFlex.xs="100%" *ngIf="dataNotFound">EVENT INFO NOT FOUND</div>
+  <div class="sessions" fxFlex="50%" fxFlex.xs="100%" *ngIf="dataNotFound">EVENT INFO NOT FOUND</div>
   <div fxFlex="50%" fxFlex.xs="100%">
     <button class="return-button" mat-raised-button [routerLink]="['/']">Volver</button>
     <app-shopping-cart [events]="eventsSelected" (remove)="remove($event)"></app-shopping-cart>
