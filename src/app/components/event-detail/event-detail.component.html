@@ -1,9 +1,9 @@
 <div class="details" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
-  <div class="sessions" fxFlex="50%" fxFlex.xs="100%" *ngIf="!dataNotFound">
-    <b>{{eventInfo.event?eventInfo.event.title:""}}</b>
-    <p>{{eventInfo.event?eventInfo.event.subtitle:""}}</p>
-    <div *ngFor="let session of eventInfo.sessions" fxLayout="row" fxLayoutGap="10px">
-      <div fxFlex="50%" fxLayout="column" fxLayoutAlign="space-between center">
+  <div class="sessions" fxFlex="50%" fxFlex.xs="100%" *ngIf="!(dataNotFound$ | async)">
+    <b>{{(eventInfo$ | async)?.event?.title}}</b>
+    <p>{{(eventInfo$ | async)?.event?.subtitle}}</p>
+    <div *ngFor="let session of (eventInfo$ | async)?.sessions" fxLayout="row" fxLayoutGap="10px">
+      <div fxFlex="50%" fxLayout="column" fxLayoutAlign="space-between left">
         <span>Fecha: {{getFormattedDate(session.date)}} Disponibilidad: {{ session.availability }}</span>
       </div>
       <div fxFlex="50%" fxLayout="row" fxLayoutAlign="end center">
@@ -13,9 +13,9 @@
       </div>
     </div>
   </div>
-  <div class="sessions" fxFlex="50%" fxFlex.xs="100%" *ngIf="dataNotFound">EVENT INFO NOT FOUND</div>
+  <div class="sessions" fxFlex="50%" fxFlex.xs="100%" *ngIf="(dataNotFound$ | async)">EVENT INFO NOT FOUND</div>
   <div fxFlex="50%" fxFlex.xs="100%">
     <button class="return-button" mat-raised-button [routerLink]="['/']">Volver</button>
-    <app-shopping-cart [events]="eventsSelected" (remove)="remove($event)"></app-shopping-cart>
+    <app-shopping-cart [events]="(eventsSelected$ | async)" (updateInfoSessions)="updateInfoSessions()"></app-shopping-cart>
   </div>
 </div>

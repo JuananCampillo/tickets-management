@@ -11,11 +11,12 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexLayoutModule, SERVER_TOKEN } from '@angular/flex-layout';
 import { HeaderComponent } from './components/header/header.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 import { LocalstorageService } from './local-storage/local-storage.service';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -23,8 +24,7 @@ import { LocalstorageService } from './local-storage/local-storage.service';
     EventListComponent,
     EventDetailComponent,
     EventCardComponent,
-    HeaderComponent,
-    ShoppingCartComponent
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -33,13 +33,16 @@ import { LocalstorageService } from './local-storage/local-storage.service';
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ShoppingCartComponent
   ],
   providers: [
     provideHttpClient(withFetch()),
     provideClientHydration(),
     provideAnimationsAsync(),
     LocalstorageService,
+    { provide: SERVER_TOKEN, useValue: true },
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
